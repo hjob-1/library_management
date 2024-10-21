@@ -1,0 +1,11 @@
+[ {
+  "id" : "94ed1d1c-83a6-4291-8ef8-57f51d13982d",
+  "title" : "book1",
+  "author" : "eyob",
+  "available" : true
+}, {
+  "id" : "07ea55cc-a3fe-4e01-b672-e9060a656ebe",
+  "title" : "Think And Grow Rich",
+  "author" : "Napolean Hill",
+  "available" : true
+} ]

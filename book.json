@@ -1,11 +1,16 @@
 [ {
   "id" : "94ed1d1c-83a6-4291-8ef8-57f51d13982d",
-  "title" : "book1",
-  "author" : "eyob",
-  "available" : true
+  "title" : "Fiker eske Mekaber",
+  "author" : "Addis",
+  "available" : false
 }, {
   "id" : "07ea55cc-a3fe-4e01-b672-e9060a656ebe",
   "title" : "Think And Grow Rich",
   "author" : "Napolean Hill",
   "available" : true
+}, {
+  "id" : "f73a1cff-b3e1-41dd-8110-49287f24a45d",
+  "title" : "The Alchemist",
+  "author" : "unknown",
+  "available" : false
 } ]

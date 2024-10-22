@@ -1,0 +1,13 @@
+[ {
+  "userId" : "b2d122d9-5623-4040-adc6-b1ac22f45b55",
+  "name" : "user 2 updated",
+  "email" : "user2@gmail.com",
+  "password" : "1234",
+  "borrowedBooks" : [ {
+    "id" : "f73a1cff-b3e1-41dd-8110-49287f24a45d",
+    "title" : "The Alchemist",
+    "author" : "unknown",
+    "available" : true
+  } ],
+  "overdueBooks" : [ ]
+} ]

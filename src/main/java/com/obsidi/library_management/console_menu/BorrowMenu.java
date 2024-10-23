@@ -3,6 +3,7 @@ package com.obsidi.library_management.console_menu;
 import java.util.List;
 import java.util.Scanner;
 
+import static com.obsidi.library_management.Util.*;
 import com.obsidi.library_management.business_logics.BookBussinesLogic;
 import com.obsidi.library_management.business_logics.BorrowingBusinessLogic;
 import com.obsidi.library_management.business_logics.UserBusinessLogic;
@@ -11,8 +12,9 @@ import com.obsidi.library_management.models.BorrowingRecord;
 import com.obsidi.library_management.models.User;
 
 public class BorrowMenu {
-	private final String[] options = { "1. Borrow a Book", "2. Return a Book", "3. View Borrowing Records",
-			"4. Go back to Main Menu", "0. Exit" };
+	private static final String[] OPTIONS = { "[1] Borrow a Book", "[2] Return a Book", "[3] View Borrowing Records",
+			"[4] Go back to Main Menu", ANSI_RED + "[0] Exit" };
+	private static final String TITLE = "Welcome To \uD83D\uDCD5 Borrowing Management";
 	private BorrowingBusinessLogic borrowingLogic;
 	private BookBussinesLogic bookLogic;
 	private UserBusinessLogic userLogic;
@@ -35,11 +37,10 @@ public class BorrowMenu {
 
 	public void borrowingMenu() {
 		int choice;
-		System.out.println("\n\t\tWelcome To \uD83D\uDCD5 Borrowing Management\t\t\n");
-		for (String option : options) {
-			System.out.println("\t" + option);
-		}
-		System.out.print("\n\tPlease choose an option (0-4): ");
+		displayHeader(TITLE, "");
+		displayMenu(OPTIONS);
+
+		System.out.print("\n\tEnter your choice (0-4) and press Enter to continue:  ");
 		choice = scanner.nextInt();
 		scanner.nextLine();
 		switch (choice) {
@@ -64,7 +65,7 @@ public class BorrowMenu {
 	// Borrow a book
 	public void borrowBook() {
 
-		System.out.println("Please enter your User ID:");
+		print(ANSI_CYAN + "\n\t>> Please Enter your User ID: ");
 		String userId = scanner.nextLine();
 
 		// This whole code should be placed in verify bussines logic
@@ -76,7 +77,7 @@ public class BorrowMenu {
 			return;
 		}
 
-		System.out.println("Please enter the Book ID you want to borrow:");
+		print("\t>> Please enter the Book ID you want to borrow: " + ANSI_RESET);
 		String bookId = scanner.nextLine();
 
 		// Check if the book exists and is available

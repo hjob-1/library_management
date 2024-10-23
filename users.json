@@ -10,4 +10,11 @@
     "available" : true
   } ],
   "overdueBooks" : [ ]
+}, {
+  "userId" : "29c56644-f33f-45f0-8a3d-99626c4bc3f3",
+  "name" : "Hjob",
+  "email" : "Hjob@gmail.com",
+  "password" : "1234",
+  "borrowedBooks" : [ ],
+  "overdueBooks" : [ ]
 } ]

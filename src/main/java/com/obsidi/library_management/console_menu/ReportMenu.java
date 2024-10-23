@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import com.obsidi.library_management.Util;
 import com.obsidi.library_management.business_logics.BookBussinesLogic;
 import com.obsidi.library_management.business_logics.BorrowingBusinessLogic;
 import com.obsidi.library_management.business_logics.UserBusinessLogic;
@@ -13,6 +14,11 @@ import com.obsidi.library_management.models.BorrowingRecord;
 import com.obsidi.library_management.models.User;
 
 public class ReportMenu {
+
+	private final static String TITLE = "📊 Library Analytics Dashboard";
+	private final static String SUB_TITLE = "";
+	private final static String[] OPTIONS = { "[1] 📚 Books Overview Report ", "[2] 📋 Top Borrowed Books",
+			"[3] 📋 Active Users", Util.ANSI_RED + "[0] Exit" };
 
 	private BorrowingBusinessLogic borrowingLogic;
 	private BookBussinesLogic bookLogic;
@@ -27,12 +33,10 @@ public class ReportMenu {
 	}
 
 	public void displayElegantReportMenu() {
-		System.out.println("\n\n\t--- 📊 Reports Menu ---");
-		System.out.println("\t• 1. Books Overview Report 📚");
-		System.out.println("\t• 2. Top Borrowed Books 🔝");
-		System.out.println("\t• 3. Active Users 📋");
-		System.out.println("\t• 0. Exit");
-		System.out.print("\n\tEnter your choice: ");
+		Util.displayHeader(TITLE, SUB_TITLE);
+		Util.displayMenu(OPTIONS);
+
+		System.out.print("\n\t Enter your choice (0 - 3) and press Enter to continue:   ");
 
 		int choice = getValidChoice(0, 3);
 
@@ -90,7 +94,9 @@ public class ReportMenu {
 	private void showTopBorrowedBooks() {
 		System.out.println("\n\n--- 🔝 Top Borrowed Books ---\n");
 		List<BorrowingRecord> borrowingRecords = borrowingLogic.getBorrowingRecords();
+		// store ID and number of times borrowed
 		Map<String, Long> borrowCountByBook = borrowingRecords.stream()
+				// group borrowing record by book ID -> Total number
 				.collect(Collectors.groupingBy(BorrowingRecord::getBookId, Collectors.counting()));
 
 		// Sort the books by borrow count in descending order

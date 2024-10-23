@@ -9,24 +9,11 @@ import com.obsidi.library_management.console_menu.UserMenu;
 
 public class LibraryManagementSystem {
 
-	public static void hashSymbol(int number) {
-		while (number >= 1) {
-			System.out.print("#");
-			number--;
-		}
-		System.out.println();
-
-	}
-
-	public static void mainOptions() {
-		String[] options = { "1. \uD83D\uDCD5 Book Management", "2. \uD83D\uDC64 User Management",
-				"3. \uD83D\uDCD6 Borrowing & Returning Books", "4. \u23F3 Overdue Books Management",
-				"5. \uD83D\uDCDD Report Generation", "6. \uD83D\uDEAA Exit" };
-
-		for (String option : options) {
-			System.out.println("\t" + option);
-		}
-	}
+	private final static String TITLE = "Welcome to the Library Management System";
+	private final static String SUB_TITLE = "Unlock a World of Knowledge";
+	private final static String[] OPTIONS = { "[1] \uD83D\uDCD5 Book Management", "[2] \uD83D\uDC64 User Management",
+			"[3] \uD83D\uDCD6 Borrowing & Returning Books", "[4] \u23F3 Overdue Books Management",
+			"[5] \uD83D\uDCDD Report Generation", Util.ANSI_RED + "[6] \uD83D\uDEAA Exit" };
 
 	public static void main(String[] args) {
 		BookMenu bookOptions = new BookMenu();
@@ -34,14 +21,13 @@ public class LibraryManagementSystem {
 		BorrowMenu borrowOptions = new BorrowMenu();
 		ReportMenu report = new ReportMenu();
 		Scanner scanner = new Scanner(System.in);
-		int choice;
-		hashSymbol(100);
-		System.out.println("\t\t\tWelcome to the Library Management System\t\t");
-		hashSymbol(100);
-		mainOptions();
 
-		System.out.print("\n\tPlease choose an option (1-6): ");
-		choice = scanner.nextInt();
+		Util.displayHeader(TITLE, SUB_TITLE);
+		Util.displayMenu(OPTIONS);
+
+		System.out.print("\n        Enter your choice (1-6) and press Enter to continue:  ");
+		int choice = scanner.nextInt();
+		scanner.nextLine();
 
 		switch (choice) {
 		case 1:

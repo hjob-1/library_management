@@ -1,0 +1,57 @@
+[ {
+  "recordId" : "c0419dc2-088f-4bcf-9985-70e7d88d5d7c",
+  "userId" : "fabf679a-c956-40b0-ad64-787a2ad39c91",
+  "bookId" : "7844b425-9cbf-4223-8b08-7a91b9f89cb0",
+  "borrowDate" : 1730056054208,
+  "returnDate" : 1730056141237,
+  "dueDate" : 1731265654208,
+  "returned" : true
+}, {
+  "recordId" : "d10758da-984c-4684-8bb2-7b58a819859b",
+  "userId" : "eec8a233-5067-4b56-8539-8c236ae4cccf",
+  "bookId" : "aeec00f8-98bb-4e4d-b2b7-bb6d75e8782f",
+  "borrowDate" : 1730056280362,
+  "returnDate" : null,
+  "dueDate" : 1731265880362,
+  "returned" : false
+}, {
+  "recordId" : "a1958e8e-6072-474d-a0d8-95387e292b72",
+  "userId" : "fabf679a-c956-40b0-ad64-787a2ad39c91",
+  "bookId" : "b82329be-bff9-4d78-b1b9-e30cd0b5280e",
+  "borrowDate" : 1730070439299,
+  "returnDate" : 1730071215375,
+  "dueDate" : 1731280039299,
+  "returned" : true
+}, {
+  "recordId" : "ac940e50-55ba-49ed-9c25-9e9f74fcf417",
+  "userId" : "fabf679a-c956-40b0-ad64-787a2ad39c91",
+  "bookId" : "c20099ff-4d7d-4a53-8c5a-4b654a7a8e34",
+  "borrowDate" : 1730070528206,
+  "returnDate" : 1730071270523,
+  "dueDate" : 1731280128206,
+  "returned" : true
+}, {
+  "recordId" : "775b4bdd-8d0a-4665-b63e-776ab186eced",
+  "userId" : "fabf679a-c956-40b0-ad64-787a2ad39c91",
+  "bookId" : "9dab55f4-fa58-4e8e-acc9-570df54b1399",
+  "borrowDate" : 1730070658507,
+  "returnDate" : null,
+  "dueDate" : 1731280258507,
+  "returned" : false
+}, {
+  "recordId" : "88d178f9-cc37-48d9-a95c-09e6d6ece667",
+  "userId" : "fabf679a-c956-40b0-ad64-787a2ad39c91",
+  "bookId" : "f3e8b4a2-4c89-4e8b-ade0-89d92b3d58c4",
+  "borrowDate" : 1730071373267,
+  "returnDate" : null,
+  "dueDate" : 1731280973267,
+  "returned" : false
+}, {
+  "recordId" : "039b2e55-3bcd-4cd9-a08e-938e477201aa",
+  "userId" : "fabf679a-c956-40b0-ad64-787a2ad39c91",
+  "bookId" : "b82329be-bff9-4d78-b1b9-e30cd0b5280e",
+  "borrowDate" : 1730071412733,
+  "returnDate" : null,
+  "dueDate" : 1731281012733,
+  "returned" : false
+} ]

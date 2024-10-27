@@ -1,68 +1,83 @@
 package com.obsidi.library_management.console_menu;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 import static com.obsidi.library_management.Util.*;
+
+import com.obsidi.library_management.LibraryManagementSystem;
 import com.obsidi.library_management.business_logics.BookBussinesLogic;
 import com.obsidi.library_management.models.Book;
 
 public class BookMenu {
+	private static final Scanner scanner = new Scanner(System.in); // Static scanner instance
+
 	private final static String TITLE = " 📕 Welcome to the Book Management Section 📕";
 	private final static String SUB_TITLE = "Easily Manage Your Books";
 
 	private final static String[] OPTIONS = { "[1] Add a New Book", "[2] Remove an Existing Book",
-			"[3] Update Book Information", "[4] Search for a Book", "[5] View All Books", "[6] Go back to Main Menu",
-			"\u001B[91m[0] Exit" };
+			"[3] Update Book Information", "[4] Search for a Book", "[5] View All Books", "[6] Go back to Main Menu", };
 
 	private BookBussinesLogic bookLogic;
-	private Scanner scanner;
 
 	public BookMenu() {
 		this.bookLogic = new BookBussinesLogic();
-		this.scanner = new Scanner(System.in);
 	}
 
 	public void bookMenu() {
-		int choice;
-		displayHeader(TITLE, SUB_TITLE);
-		displayMenu(OPTIONS);
-		System.out.print("\n\t Enter your choice (0-6) and press Enter to continue:  ");
-		choice = scanner.nextInt();
-		scanner.nextLine();
-		switch (choice) {
-		case 1:
-			addBook();
-			break;
-		case 2:
-			deleteBook();
-			break;
-		case 3:
-			updateBook();
-			break;
-		case 4:
-			searchBook();
-			break;
-		case 5:
-			viewAllBook();
-			break;
-		case 6:
-			System.out.print("\t selection 6");
-			break;
-		default:
-			break;
-		}
 
+		int choice;
+		try {
+			do {
+				print("\n");
+				displayHeader(TITLE, SUB_TITLE);
+				displayMenu(OPTIONS);
+
+				choice = getValidChoice(1, 6, scanner);
+
+				switch (choice) {
+				case 1:
+					addBook();
+					break;
+				case 2:
+					deleteBook();
+					break;
+				case 3:
+					updateBook();
+					break;
+				case 4:
+					searchBook();
+					break;
+				case 5:
+					viewAllBook();
+					break;
+				case 6:
+					LibraryManagementSystem.mainMenu();
+					break;
+				default:
+					break;
+				}
+			} while (choice != 0);
+		} finally {
+			scanner.close();
+		}
 	}
 
 	public void viewAllBook() {
-
-		// add different color for the heading
-		// add different color for available or not (red or green)
-		print(ANSI_CYAN + "\nLIST OF ALL BOOKS\n");
-		table(new String[] { "ID", "Title", "Author", "Available" }, "_");
 		List<Book> books = bookLogic.getAll();
-		displayBookTableContent(books);
+		// file not existed exception / file deleted
+		if (books == null) {
+			return;
+		} else if (books.isEmpty()) { // file empty
+			print("\n\tThere is no book added yet.");
+			// file existed it will display an empty table or with data
+		} else {
+			print(ANSI_CYAN + "\nLIST OF ALL BOOKS\n");
+			printDynamicBookTable(new ArrayList<>(Arrays.asList("Book ID", "Title", "Author", "Available")), books);
+		}
+
 	}
 
 	public void searchBook() {
@@ -71,9 +86,8 @@ public class BookMenu {
 
 		print("\n\tChoose search criteria:\n");
 		displayMenu(new String[] { "[1] Search by Title", "[2] Search by Author", "[3] Search by Book Availablity" });
-		print("\n\tEnter the number corresponding to your choice: ");
-		int choice = scanner.nextInt();
-		scanner.nextLine();
+
+		int choice = getValidChoice(1, 3, scanner);
 
 		switch (choice) {
 		case 1:
@@ -98,12 +112,11 @@ public class BookMenu {
 			System.out.println("Invalid choice. Please try again.");
 		}
 
-		// Do validation here
-		if (filtered.isEmpty()) {
-			System.out.println("The book you are looking is not in our system.");
+		if (filtered == null || filtered.isEmpty()) {
+			print("\n\tThe book you are looking is not in our system.\n");
 		} else {
-			table(new String[] { "ID", "Title", "Author", "Available" }, "_");
-			displayBookTableContent(filtered);
+
+			printDynamicBookTable(new ArrayList<>(Arrays.asList("Book ID", "Title", "Author", "Available")), filtered);
 
 		}
 	}
@@ -113,57 +126,46 @@ public class BookMenu {
 		displaySubHeader("DELETE A BOOK");
 		print("\n\t>> Please Enter the Book ID you want to delete: ");
 		id = scanner.nextLine();
-		bookLogic.delete(id);
-		// delete the book
-		// show a message if there is no book available display an error message
-		// ask them if they want to go back to the main menu or book page
 
+		bookLogic.delete(id);
 	}
 
 	public void updateBook() {
-		try (Scanner scanner = new Scanner(System.in)) {
-			int choice;
 
-			String id;
-			String author;
-			String title;
-			displaySubHeader("UPDATE A BOOK");
+		int choice;
 
-			print("\n\tPlease choose the field you would like to update:\n\n");
-			displayMenu(new String[] { "[1] Update Book Title", "[2] Update Book Author" });
-			print("\n\tEnter the number corresponding to your choice => ");
+		String id;
+		String author;
+		String title;
+		displaySubHeader("UPDATE A BOOK");
 
-			choice = scanner.nextInt();
-			scanner.nextLine();
+		print("\n\tPlease choose the field you would like to update:\n\n");
+		displayMenu(new String[] { "[1] Update Book Title", "[2] Update Book Author" });
 
-			switch (choice) {
+		choice = getValidChoice(1, 2, scanner);
 
-			case 1:
-				print(ANSI_CYAN + "\n\t>> Enter Book's ID:");
-				id = scanner.nextLine().trim(); // Get the book's ID
+		switch (choice) {
 
-				print("\n\t>> Enter the new Book Title:");
-				title = scanner.nextLine().trim(); // Get the new book title
+		case 1:
+			print(ANSI_CYAN + "\n\t>> Enter Book's ID:");
+			id = scanner.nextLine().trim(); // Get the book's ID
 
-				// Validation before adding it
-				bookLogic.updateFieldById(id, "title", title);
-				System.out.println("The book has been successfully updated.");
-				System.out.println("Updated Book - ID: " + id + ", New Title: " + title);
-				break;
-			case 2:
-				print("\n\t>> Please enter the book's ID:");
-				id = scanner.nextLine().trim(); // Get the book's ID
+			print("\n\t>> Enter the new Book Title:");
+			title = scanner.nextLine().trim(); // Get the new book title
 
-				System.out.println("\n\t>> Enter the new author name:");
-				author = scanner.nextLine().trim(); // Get the author's name
+			// Validation before adding it
+			bookLogic.updateFieldById(id, "title", title);
+			break;
+		case 2:
+			print("\n\t>> Please enter the book's ID:");
+			id = scanner.nextLine().trim(); // Get the book's ID
 
-				bookLogic.updateFieldById(id, "author", author);
-				System.out.println("Your book is updated");
-				System.out.println("updated book " + id + "  " + author);
-				break;
+			print("\n\t>> Enter the new author name:");
+			author = scanner.nextLine().trim(); // Get the author's name
+			print(ANSI_RESET);
+			bookLogic.updateFieldById(id, "author", author);
+			break;
 
-			}
-			scanner.close();
 		}
 
 	}
@@ -178,32 +180,7 @@ public class BookMenu {
 		author = scanner.nextLine();
 
 		bookLogic.add(new Book(title, author));
-		System.out.println("Successfully added your book");
-		System.out.println(title + " by" + author);
 
 	}
 
-//	private int getValidChoice(int min, int max) {
-//		int choice = 0;
-//		while (choice < min || choice > max) {
-//			System.out.println("Enter a number between " + min + " and " + max + ":");
-//			try {
-//				choice = Integer.parseInt(scanner.nextLine());
-//			} catch (NumberFormatException e) {
-//				System.out.println("Invalid input. Please enter a valid number.");
-//			}
-//		}
-//		return choice;
-//	}
-
-	public void displayBookTableContent(List<Book> books) {
-		for (Book book : books) {
-			printSymbol(130, "_");
-			System.out.println(book.getId() + " \t " + book.getTitle() + "\t\t\t " + book.getAuthor() + "\t\t\t\t\t "
-					+ (book.isAvailable() ? ANSI_GREEN + "yes" : ANSI_RED + "No"));
-			// Reset the color applied by book availability
-			print(ANSI_RESET);
-		}
-
-	}
 }

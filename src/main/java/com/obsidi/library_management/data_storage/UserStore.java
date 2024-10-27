@@ -1,6 +1,9 @@
 package com.obsidi.library_management.data_storage;
 
+import static com.obsidi.library_management.Util.notifyMsg;
+
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +14,11 @@ import com.obsidi.library_management.models.User;
 
 public class UserStore extends FileHandler<User> implements ICrudOperation<User> {
 
-	private final String filePathUser = "C:\\Users\\hjob1\\Documents\\workspace-library_management\\library_management\\src\\main\\java\\com\\obsidi\\library_management\\data_storage\\users.json";
+	private final static String filePathUser = "C:\\Users\\hjob1\\Documents\\workspace-library_management\\library_management\\src\\main\\java\\com\\obsidi\\library_management\\data_storage\\users.json";
 	private ObjectMapper objMapper;
 
 	public UserStore() {
-		super("users.json");
+		super(filePathUser);
 		this.objMapper = new ObjectMapper();
 	}
 
@@ -23,12 +26,14 @@ public class UserStore extends FileHandler<User> implements ICrudOperation<User>
 	public ArrayList<User> getAll() {
 		ArrayList<User> list = null;
 		try {
-			list = objMapper.readValue(new File("users.json"), new TypeReference<ArrayList<User>>() {
+			list = objMapper.readValue(new File(filePathUser), new TypeReference<ArrayList<User>>() {
 			});
+		} catch (FileNotFoundException fne) {
+			notifyMsg("error", "File does not exist");
 		} catch (IOException e) {
-			e.printStackTrace();
+			notifyMsg("error", "something went wrong");
 		}
-		return list;
+		return list == null ? new ArrayList<User>() : list;
 	}
 
 	@Override
@@ -59,8 +64,14 @@ public class UserStore extends FileHandler<User> implements ICrudOperation<User>
 	public void delete(String id) {
 		ArrayList<User> users = getAll();
 		// Remove if ID exists
-		users.removeIf(user -> user.getUserId().equals(id));
-		save(users);
+		boolean removed = users.removeIf(user -> user.getUserId().equals(id));
+		if (removed) {
+			save(users);
+			notifyMsg("success", "user with ID " + id + " has been successfully removed.");
+		} else {
+			notifyMsg("error", "No user found with ID " + id + ".");
+		}
+
 	}
 
 	@Override
@@ -79,15 +90,16 @@ public class UserStore extends FileHandler<User> implements ICrudOperation<User>
 					user.setPassword(newValue);
 					break;
 				default:
-					System.out.println("Invalid field name: " + fieldName);
+					notifyMsg("error", "Invalid field name: " + fieldName);
 					return;
 				}
-				System.out.println("User with ID " + id + " updated: " + fieldName + " changed to " + newValue);
 				save(users);
+				notifyMsg("success", "user with ID " + id + " updated: " + fieldName + " changed to " + newValue);
 				return;
 			}
 		}
-		System.out.println("User with ID " + id + " not found.");
+		notifyMsg("error", "\n\t User with ID " + id + " not found.");
+
 	}
 
 	@Override

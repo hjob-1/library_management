@@ -1,6 +1,9 @@
 package com.obsidi.library_management.data_storage;
 
+import static com.obsidi.library_management.Util.notifyMsg;
+
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,11 +16,12 @@ import com.obsidi.library_management.models.BorrowingRecord;
 import com.obsidi.library_management.models.User;
 
 public class BorrowStore extends FileHandler<BorrowingRecord> {
+	private final static String filePathBook = "C:\\Users\\hjob1\\Documents\\workspace-library_management\\library_management\\src\\main\\java\\com\\obsidi\\library_management\\data_storage\\borrowRecords.json";
 
 	private ObjectMapper objMapper;
 
 	public BorrowStore() {
-		super("borrowRecords.json");
+		super(filePathBook);
 
 		this.objMapper = new ObjectMapper();
 	}
@@ -26,13 +30,15 @@ public class BorrowStore extends FileHandler<BorrowingRecord> {
 	public ArrayList<BorrowingRecord> getAll() {
 		ArrayList<BorrowingRecord> list = null;
 		try {
-			list = objMapper.readValue(new File("borrowRecords.json"), new TypeReference<ArrayList<BorrowingRecord>>() {
+			list = objMapper.readValue(new File(filePathBook), new TypeReference<ArrayList<BorrowingRecord>>() {
 			});
 
+		} catch (FileNotFoundException fne) {
+			notifyMsg("error", "File does not exist\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return list;
+		return list == null ? new ArrayList<BorrowingRecord>() : list;
 	}
 
 	public BorrowingRecord getById(String id) {
@@ -46,21 +52,24 @@ public class BorrowStore extends FileHandler<BorrowingRecord> {
 
 	}
 
-	public void returnBook(User user, Book book) {
+	public boolean returnBook(User user, Book book) {
 		BorrowingRecord record = findActiveBorrowingRecord(user.getUserId(), book.getId());
 
 		if (record != null) {
 			record.setReturnDate(new Date());
 			update(record); // Update the record in the store
-			System.out.println("Book returned: " + book.getTitle() + " by " + user.getName());
+			notifyMsg("success", "Book returned: " + book.getTitle() + " by " + user.getName());
+			return true;
 		} else {
-			System.out.println("No active borrowing record found for this book.");
+			notifyMsg("error", "No active borrowing record found for this book.\n");
+			return false;
 		}
 	}
 
+	// record usually not deleted
+	// left empty intentionally so that records will not be deleted
 	public void delete(String id) {
-		// Implement deletion logic if needed, though usually, borrowing records are not
-		// deleted
+
 	}
 
 	public void update(BorrowingRecord updatedRecord) {

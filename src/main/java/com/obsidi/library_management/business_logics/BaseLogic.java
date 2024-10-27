@@ -1,5 +1,6 @@
 package com.obsidi.library_management.business_logics;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.obsidi.library_management.data_storage.ICrudOperation;
@@ -52,7 +53,26 @@ public abstract class BaseLogic<T> implements ICrudOperation<T> {
 
 	}
 
-	public abstract void verify();
+	public void validateFields(String id, String fieldName, String newValue) throws InvalidInputException {
+		List<String> errorMessages = new ArrayList<>();
+		if (id == null || id.isEmpty()) {
+			errorMessages.add("Error: ID can not be null or empty.");
+		}
+		if (newValue == null || newValue.isEmpty()) {
+			errorMessages.add("Error: " + fieldName + " can not be null or empty.");
+		}
+		if (id.matches("\\d+")) {
+			errorMessages.add("Error: Id can not be number");
+		}
+		if (newValue.matches("\\d+")) {
+			errorMessages.add("Error: " + fieldName + " can not be number");
+		}
+		if (!errorMessages.isEmpty()) {
+			throw new InvalidInputException(String.join("\n\t", errorMessages));
+		}
+	}
+
+	public abstract void verify(T item) throws InvalidInputException;
 
 	public ICrudOperation<T> getRepository() {
 		return this.repository;

@@ -1,0 +1,91 @@
+[ {
+  "userId" : "fabf679a-c956-40b0-ad64-787a2ad39c91",
+  "name" : "EYob updated",
+  "email" : "h@gm.com",
+  "password" : "1234566",
+  "borrowedBooks" : [ {
+    "id" : "9dab55f4-fa58-4e8e-acc9-570df54b1399",
+    "title" : "1984",
+    "author" : "George Orwell",
+    "available" : true
+  }, {
+    "id" : "f3e8b4a2-4c89-4e8b-ade0-89d92b3d58c4",
+    "title" : "Brave New World",
+    "author" : "Aldous Huxley",
+    "available" : true
+  }, {
+    "id" : "b82329be-bff9-4d78-b1b9-e30cd0b5280e",
+    "title" : "The Hobbit",
+    "author" : "J.R.R. Tolkien",
+    "available" : true
+  } ],
+  "overdueBooks" : [ ]
+}, {
+  "userId" : "b937fa85-8c0a-4c0e-bc6a-78027ebf684b",
+  "name" : "Alice Johnson",
+  "email" : "alice.johnson@example.com",
+  "password" : "password123",
+  "borrowedBooks" : [ ],
+  "overdueBooks" : [ ]
+}, {
+  "userId" : "eec8a233-5067-4b56-8539-8c236ae4cccf",
+  "name" : "Bob Smith",
+  "email" : "bob.smith@example.com",
+  "password" : "qwerty9876",
+  "borrowedBooks" : [ {
+    "id" : "aeec00f8-98bb-4e4d-b2b7-bb6d75e8782f",
+    "title" : "Moby Dick",
+    "author" : "Herman Melville",
+    "available" : true
+  } ],
+  "overdueBooks" : [ ]
+}, {
+  "userId" : "d3c2be54-3a48-4d85-bc3c-1b17f7c1be3a",
+  "name" : "Carol White",
+  "email" : "carol.white@example.com",
+  "password" : "mypassword456",
+  "borrowedBooks" : [ ],
+  "overdueBooks" : [ ]
+}, {
+  "userId" : "78417c0b-17f3-4694-9500-05f16d8c9270",
+  "name" : "David Lee",
+  "email" : "david.lee@example.com",
+  "password" : "david1234",
+  "borrowedBooks" : [ ],
+  "overdueBooks" : [ ]
+}, {
+  "userId" : "cd4b87d9-637a-44d5-9e05-cb2e62b6d3ab",
+  "name" : "Eve Adams",
+  "email" : "eve.adams@example.com",
+  "password" : "evepass567",
+  "borrowedBooks" : [ ],
+  "overdueBooks" : [ ]
+}, {
+  "userId" : "345af3d1-7c59-411b-bd5f-2b7a0de73cc3",
+  "name" : "Frank Miller",
+  "email" : "frank.miller@example.com",
+  "password" : "password789",
+  "borrowedBooks" : [ ],
+  "overdueBooks" : [ ]
+}, {
+  "userId" : "71e8bc39-144d-48c3-935b-3921b0b77b6b",
+  "name" : "Grace Taylor",
+  "email" : "grace.taylor@example.com",
+  "password" : "gracetay123",
+  "borrowedBooks" : [ ],
+  "overdueBooks" : [ ]
+}, {
+  "userId" : "7d835b49-6fcf-47cf-91ae-f0c0e0a9b5d9",
+  "name" : "Henry Brown",
+  "email" : "henry.brown@example.com",
+  "password" : "henrybrown999",
+  "borrowedBooks" : [ ],
+  "overdueBooks" : [ ]
+}, {
+  "userId" : "fcdd8f4b-1241-45fa-8d93-5d1a0e816760",
+  "name" : "Ivy Martinez",
+  "email" : "ivy.martinez@example.com",
+  "password" : "martinez2023",
+  "borrowedBooks" : [ ],
+  "overdueBooks" : [ ]
+} ]

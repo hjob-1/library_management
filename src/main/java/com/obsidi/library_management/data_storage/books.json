@@ -1,0 +1,51 @@
+[ {
+  "id" : "7844b425-9cbf-4223-8b08-7a91b9f89cb0",
+  "title" : "The Great Gatsby",
+  "author" : "F. Scott Fitzgerald",
+  "available" : true
+}, {
+  "id" : "eb47b63b-47c4-4f96-a927-f4522c93a347",
+  "title" : "To Kill a Mockingbird",
+  "author" : "Harper Lee",
+  "available" : true
+}, {
+  "id" : "9dab55f4-fa58-4e8e-acc9-570df54b1399",
+  "title" : "1984",
+  "author" : "George Orwell",
+  "available" : false
+}, {
+  "id" : "e1c15026-c4d7-47d5-b0f1-7f3a8b4a1a9e",
+  "title" : "Pride and Prejudice",
+  "author" : "Jane Austen",
+  "available" : true
+}, {
+  "id" : "c20099ff-4d7d-4a53-8c5a-4b654a7a8e34",
+  "title" : "The Catcher in the Rye",
+  "author" : "J.D. Salinger",
+  "available" : true
+}, {
+  "id" : "f3e8b4a2-4c89-4e8b-ade0-89d92b3d58c4",
+  "title" : "Brave New World",
+  "author" : "Aldous Huxley",
+  "available" : false
+}, {
+  "id" : "b82329be-bff9-4d78-b1b9-e30cd0b5280e",
+  "title" : "The Hobbit",
+  "author" : "J.R.R. Tolkien",
+  "available" : false
+}, {
+  "id" : "57d216b4-09c7-4095-97d1-4aeeb0dcf9d0",
+  "title" : "The Alchemist",
+  "author" : "Paulo Coelho",
+  "available" : true
+}, {
+  "id" : "aeec00f8-98bb-4e4d-b2b7-bb6d75e8782f",
+  "title" : "Moby Dick",
+  "author" : "Herman Melville",
+  "available" : false
+}, {
+  "id" : "72ebf6a2-45b7-4d60-8e1f-4b5e39d8f19d",
+  "title" : "War and Peace",
+  "author" : "Leo Tolstoy",
+  "available" : true
+} ]

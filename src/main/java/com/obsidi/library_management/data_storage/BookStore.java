@@ -1,6 +1,7 @@
 package com.obsidi.library_management.data_storage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,32 +9,31 @@ import java.util.List;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.obsidi.library_management.models.Book;
+import static com.obsidi.library_management.Util.notifyMsg;
 
 public class BookStore extends FileHandler<Book> implements ICrudOperation<Book> {
 
-	private final String filePathBook = "C:\\Users\\hjob1\\Documents\\workspace-library_management\\library_management\\src\\main\\java\\com\\obsidi\\library_management\\data_storage\\books.txt";
+	private final static String filePathBook = "C:\\Users\\hjob1\\Documents\\workspace-library_management\\library_management\\src\\main\\java\\com\\obsidi\\library_management\\data_storage\\books.json";
 	private ObjectMapper objMapper;
 
 	public BookStore() {
-		super("book.json");
+		super(filePathBook);
 		this.objMapper = new ObjectMapper();
-//		books = new ArrayList<>();
-//		fileHandler = new FileHandler<Book>("book.json");
-//		loadBooks();
-
 	}
 
 	@Override
 	public ArrayList<Book> getAll() {
 		ArrayList<Book> list = null;
 		try {
-			list = objMapper.readValue(new File("book.json"), new TypeReference<ArrayList<Book>>() {
+			list = objMapper.readValue(new File(filePathBook), new TypeReference<ArrayList<Book>>() {
 			});
 
+		} catch (FileNotFoundException fne) {
+			notifyMsg("error", "File does not exist\n");
 		} catch (IOException e) {
-			e.printStackTrace();
+			notifyMsg("error", "something went wrong\n");
 		}
-		return list;
+		return list == null ? new ArrayList<Book>() : list;
 	}
 
 	@Override
@@ -49,13 +49,11 @@ public class BookStore extends FileHandler<Book> implements ICrudOperation<Book>
 
 	@Override
 	public void update(String id, Book item) {
-		List<Book> books = super.getAll();
-		for (Book book : books) {
-			if (book.getId().equals(id)) {
+		List<Book> books = getAll();
+		for (int i = 0; i < books.size(); i++) {
+			if (books.get(i).getId().equals(id)) {
 				// update the whole book information.
-				book.setAuthor(item.getAuthor());
-				book.setTitle(item.getTitle());
-				book.setAvailable(item.isAvailable());
+				books.set(i, item);
 				break;
 			}
 		}
@@ -66,8 +64,14 @@ public class BookStore extends FileHandler<Book> implements ICrudOperation<Book>
 	public void delete(String id) {
 		ArrayList<Book> books = getAll();
 		// RemoveIf ID existed
-		books.removeIf(book -> book.getId().equals(id));
-		save(books);
+		boolean removed = books.removeIf(book -> book.getId().equals(id));
+		if (removed) {
+			// save the updated book list
+			save(books);
+			notifyMsg("success", "Book with ID " + id + " has been successfully removed.\n");
+		} else {
+			notifyMsg("error", "No book found with ID " + id + ".\n");
+		}
 	}
 
 	@Override
@@ -87,15 +91,16 @@ public class BookStore extends FileHandler<Book> implements ICrudOperation<Book>
 					book.setAvailable(isAvailable);
 					break;
 				default:
-					System.out.println("Invalid field name: " + fieldName);
+					notifyMsg("error", "Invalid field name: " + fieldName + "\n");
 					return;
 				}
-				System.out.println("Book with ID " + id + " updated: " + fieldName + " changed to " + newValue);
 				save(books);
+				notifyMsg("success",
+						"Book with ID " + id + " updated: " + fieldName + " changed to " + newValue + "\n");
 				return;
 			}
 		}
-		System.out.println("Book with ID " + id + " not found.");
+		notifyMsg("error", "\n\t Book with ID " + id + " not found.\n");
 
 	}
 
@@ -116,7 +121,14 @@ public class BookStore extends FileHandler<Book> implements ICrudOperation<Book>
 			break;
 		case "available":
 			boolean boolValue = Boolean.parseBoolean(value);
-			filteredBook = books.stream().filter(book -> book.isAvailable() == boolValue).toList();
+			if (isBoolean(value)) {
+				filteredBook = books.stream().filter(book -> book.isAvailable() == boolValue).toList();
+			} else {
+				notifyMsg("error", "Enter either true or false\n");
+			}
+			break;
+		default:
+			notifyMsg("error", "Invalid field name: " + fieldName + "\n");
 			break;
 
 		}
@@ -124,35 +136,8 @@ public class BookStore extends FileHandler<Book> implements ICrudOperation<Book>
 		return filteredBook;
 	}
 
-	// Helper Methods not accessible from outside.
-//	private void loadBooks() {
-//        List<String> lines = fileHandler.loadFromFile();
-//        for (String line : lines) {
-//            books.add(parseBookFromText(line));
-//        }
-//    }
-
-//    private void saveBooks() {
-//        List<String> lines = new ArrayList<>();
-//        for (Book book : books) {
-//            lines.add(formatBookToText(book));
-//        }
-//        fileHandler.saveToFile(lines);
-//    }
-
-	// This method is going to format the book attributes
-	// in the form of id,author,title,isAvailable
-//    private String formatBookToText(Book book) {
-//        return book.getId() + "," + book.getAuthor() + "," + book.getTitle() + "," + book.isAvailable();
-//    }
-
-//    private Book parseBookFromText(String text) {
-//        String[] tokens = text.split(",");
-//        String id = tokens[0];
-//        String author = tokens[1];
-//        String title = tokens[2];
-//        boolean isAvailable = Boolean.parseBoolean(tokens[3]);
-//        return new Book( author, title);
-//    }	
+	private boolean isBoolean(String value) {
+		return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false");
+	}
 
 }

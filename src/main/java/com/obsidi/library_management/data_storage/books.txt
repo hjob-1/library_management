@@ -1,6 +1,0 @@
-1,Book1,hjob,true
-2,no way ,helen,true
-3,book 3 ,new Author,true
-1,hjob,Book1,true
-2,helen,no way ,true
-3,new Author,book 3 ,true

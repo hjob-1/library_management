@@ -1,8 +1,10 @@
 package com.obsidi.library_management.models;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class BorrowingRecord {
+	private String recordId;
 	private String userId; // ID of the user borrowing the book
 	private String bookId; // ID of the borrowed book
 	private Date borrowDate; // Date when the book was borrowed
@@ -17,11 +19,13 @@ public class BorrowingRecord {
 
 	// Constructor
 	public BorrowingRecord(String userId, String bookId, Date borrowDate) {
+		this.setRecordId(UUID.randomUUID().toString());
 		this.userId = userId;
 		this.bookId = bookId;
 		this.borrowDate = borrowDate;
 		this.isReturned = false;
 		this.returnDate = null;
+		// The functionality is not implemented yet.
 		this.dueDate = calculateDueDate(borrowDate); // Example: set due date 14 days after borrowDate
 	}
 
@@ -80,6 +84,14 @@ public class BorrowingRecord {
 		// For example, setting the due date to 14 days after the borrow date
 		long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
 		return new Date(borrowDate.getTime() + (14 * MILLIS_PER_DAY));
+	}
+
+	public String getRecordId() {
+		return recordId;
+	}
+
+	public void setRecordId(String recordId) {
+		this.recordId = recordId;
 	}
 
 }

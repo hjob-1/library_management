@@ -1,64 +1,80 @@
 package com.obsidi.library_management.console_menu;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 import static com.obsidi.library_management.Util.*;
+
+import com.obsidi.library_management.LibraryManagementSystem;
 import com.obsidi.library_management.business_logics.UserBusinessLogic;
-import com.obsidi.library_management.models.Book;
 import com.obsidi.library_management.models.User;
 
 public class UserMenu {
+	private static final Scanner scanner = new Scanner(System.in); // Static scanner instance
+
 	private final static String TITLE = "Welcome To \uD83D\uDCD5 User Management";
 
 	private final String[] OPTIONS = { "[1] Add a New User", "[2] Remove an Existing User",
-			"[3] Update User Information", "[4] Search for a User", "[5] View All Users", "[6] Go back to Main Menu",
-			ANSI_RED + "[0] Exit" };
+			"[3] Update User Information", "[4] Search for a User", "[5] View All Users", "[6] Go back to Main Menu", };
 
 	private UserBusinessLogic userLogic;
-	private Scanner scanner;
 
 	public UserMenu() {
 		this.userLogic = new UserBusinessLogic();
-		this.scanner = new Scanner(System.in);
+
 	}
 
 	public void userMenu() {
 		int choice;
-		displayHeader(TITLE, "");
-		displayMenu(OPTIONS);
-		print("\n\tEnter your choice (0-6) and press Enter to continue:  ");
-		choice = scanner.nextInt();
-		scanner.nextLine();
-		switch (choice) {
-		case 1:
-			addUser();
-			break;
-		case 2:
-			deleteUser();
-			break;
-		case 3:
-			updateUser();
-			break;
-		case 4:
-			searchUser();
-			break;
-		case 5:
-			viewAllUsers();
-			break;
-		case 6:
-			print("\t selection 6");
-			break;
-		default:
-			break;
+		try {
+			do {
+				print("\n");
+				displayHeader(TITLE, "");
+				displayMenu(OPTIONS);
+				choice = getValidChoice(1, 6, scanner);
+
+				switch (choice) {
+				case 1:
+					addUser();
+					break;
+				case 2:
+					deleteUser();
+					break;
+				case 3:
+					updateUser();
+					break;
+				case 4:
+					searchUser();
+					break;
+				case 5:
+					viewAllUsers();
+					break;
+				case 6:
+					LibraryManagementSystem.mainMenu();
+					break;
+				default:
+					break;
+				}
+			} while (choice != 0);
+		} finally {
+			// close scanner to prevent resource leak
+			scanner.close();
 		}
 	}
 
 	public void viewAllUsers() {
 		List<User> users = userLogic.getAll();
-		print(ANSI_CYAN + "\nLIST OF ALL USERS\n");
-		table(new String[] { "ID", "NAME", "EMAIL" }, "_");
-		displayUSerTableContent(users);
+		// file does not existed / file deleted
+		if (users == null) {
+			return;
+		} else if (users.isEmpty()) { // file empty
+			print("\n\tThere is no user registered yet.");
+		} else { // display list of the users if users list is not empty
+			print(ANSI_CYAN + "\nLIST OF ALL USERS\n");
+			printDynamicUserTable(new ArrayList<>(Arrays.asList("User ID", "NAME", "EMAIL", "password")), users);
+		}
 
 	}
 
@@ -69,8 +85,7 @@ public class UserMenu {
 		print("\n\tChoose search criteria:\n");
 		displayMenu(new String[] { "[1] Search by Name", "[2] Search by Email" });
 
-		print("\n\tEnter the number corresponding to your choice: ");
-		choice = scanner.nextInt();
+		choice = getValidChoice(1, 2, scanner);
 		scanner.nextLine();
 		switch (choice) {
 		case 1:
@@ -88,10 +103,10 @@ public class UserMenu {
 		}
 
 		if (filtered.isEmpty()) {
-			print("The user you are looking for is not in our system.");
+			print("\n\tThe user you are looking for is not in our system.");
 		} else {
-			table(new String[] { "ID", "NAME", "EMAIL" }, "_");
-			displayUSerTableContent(filtered);
+
+			printDynamicUserTable(new ArrayList<>(Arrays.asList("User ID", "NAME", "EMAIL", "password")), filtered);
 
 		}
 	}
@@ -103,8 +118,6 @@ public class UserMenu {
 		id = scanner.nextLine();
 		// do validation
 		userLogic.delete(id);
-		// show message
-		print("User deleted");
 	}
 
 	public void updateUser() {
@@ -120,8 +133,7 @@ public class UserMenu {
 			displayMenu(new String[] { "[1] Update user name", "[2] Update user email" });
 			print("\n\tEnter the number corresponding to your choice => ");
 
-			choice = scanner.nextInt();
-			scanner.nextLine();
+			choice = getValidChoice(1, 2, scanner);
 
 			switch (choice) {
 			case 1:
@@ -130,10 +142,8 @@ public class UserMenu {
 
 				print("\n\t>> Please Enter the new user name: ");
 				name = scanner.nextLine().trim();
-				// do validtion
+				// do validation
 				userLogic.updateFieldById(id, "name", name);
-				print("The user has been successfully updated.");
-				print("Updated User - ID: " + id + ", New Name: " + name);
 				break;
 			case 2:
 				print("\n\t>> Please Enter the user ID: ");
@@ -141,10 +151,8 @@ public class UserMenu {
 
 				print("\n\t>> Please enter the new user email: ");
 				email = scanner.nextLine().trim();
-				// do validtion
+				// do validation
 				userLogic.updateFieldById(id, "email", email);
-				print("The user has been successfully updated.");
-				print("Updated User - ID: " + id + ", New Email: " + email);
 				break;
 			}
 		}
@@ -164,28 +172,14 @@ public class UserMenu {
 
 		// do validation
 		userLogic.add(new User(name, email, password));
-		print("Successfully added your user");
-		print(name + " with email: " + email);
-	}
-
-	private int getValidChoice(int min, int max) {
-		int choice = 0;
-		while (choice < min || choice > max) {
-			print("Enter a number between " + min + " and " + max + ":");
-			try {
-				choice = Integer.parseInt(scanner.nextLine());
-			} catch (NumberFormatException e) {
-				print("Invalid input. Please enter a valid number.");
-			}
-		}
-		return choice;
 	}
 
 	public void displayUSerTableContent(List<User> users) {
-		printSymbol(130, "_");
-		for (User user : users) {
-			System.out.println(user.getUserId() + " \t " + user.getName() + "\t\t\t " + user.getEmail());
 
+		for (User user : users) {
+			print("\n" + user.getName() + "\t\t\t\t\t" + user.getEmail() + "\t\t\t " + user.getPassword() + ANSI_RESET
+					+ "\n");
+			printSymbol(130, "_");
 		}
 
 	}
